@@ -16,6 +16,7 @@ func main() {
 		log.Fatal(http.ListenAndServe(":"+port, nil))
 	}()
 
+	tgToken := os.Getenv("tgToken")
 	bot, err := tgBotAPI.NewBotAPI(tgToken)
 	if err != nil {
 		log.Fatal("creating bot failed: ", err)
@@ -23,6 +24,7 @@ func main() {
 
 	log.Println("bot created")
 
+	webHook := os.Getenv("webHook")
 	if _, err := bot.SetWebhook(tgBotAPI.NewWebhook(webHook)); err != nil {
 		log.Fatalf("setting webHook: %v; error: %v", webHook, err)
 	}

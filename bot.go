@@ -34,11 +34,11 @@ func main() {
 	updates := bot.ListenForWebhook("/")
 
 	answers := []string{"Да", "Нет", "Возможно", "Затрудняюсь ответить", "Казалось бы"}
-	rand.Seed(int64(time.Now().Nanosecond()))
-	n := rand.Intn(len(answers))
-	log.Printf("answer is %v", answers[n])
 
 	for update := range updates {
+		rand.Seed(int64(time.Now().Nanosecond()))
+		n := rand.Intn(len(answers))
+		log.Printf("answer is %v", answers[n])
 		if _, err := bot.Send(tgBotAPI.NewMessage(update.Message.Chat.ID, answers[n])); err != nil {
 			log.Print(err)
 		}

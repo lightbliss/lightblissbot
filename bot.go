@@ -32,7 +32,7 @@ func main() {
 	updates := bot.ListenForWebhook("/")
 
 	answers := []string{"Да", "Нет", "Возможно", "Затрудняюсь ответить", "Казалось бы"}
-	rand.Seed(time.Now().Unix())
+	rand.Seed(time.Now().UTC().UnixNano())
 	n := rand.Int() % len(answers)
 
 	for update := range updates {

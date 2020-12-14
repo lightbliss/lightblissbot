@@ -36,6 +36,7 @@ func main() {
 	answers := []string{"Да", "Нет", "Возможно", "Затрудняюсь ответить", "Казалось бы"}
 	rand.Seed(time.Now().UTC().UnixNano())
 	n := rand.Int() % len(answers)
+	log.Printf("answer is %v", answers[n])
 
 	for update := range updates {
 		if _, err := bot.Send(tgBotAPI.NewMessage(update.Message.Chat.ID, answers[n])); err != nil {

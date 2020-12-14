@@ -35,7 +35,7 @@ func main() {
 
 	answers := []string{"Да", "Нет", "Возможно", "Затрудняюсь ответить", "Казалось бы"}
 	rand.Seed(time.Now().UTC().UnixNano())
-	n := rand.Int() % len(answers)
+	n := rand.Intn(len(answers))
 	log.Printf("answer is %v", answers[n])
 
 	for update := range updates {

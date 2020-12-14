@@ -34,7 +34,7 @@ func main() {
 	updates := bot.ListenForWebhook("/")
 
 	answers := []string{"Да", "Нет", "Возможно", "Затрудняюсь ответить", "Казалось бы"}
-	rand.Seed(time.Now().UTC().UnixNano())
+	rand.Seed(int64(time.Now().Nanosecond()))
 	n := rand.Intn(len(answers))
 	log.Printf("answer is %v", answers[n])
 

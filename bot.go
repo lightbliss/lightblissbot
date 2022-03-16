@@ -20,8 +20,8 @@ func main() {
 	play := false
 	p := make([]int, 6)
 	attempt := 0
-	cn := map[string]int{"🟢": 0, "🔴": 1, "🟡": 2, "🔵": 3, "⚫️": 4, "⚪️": 5}
-	nc := map[int]string{0: "🟢", 1: "🔴", 2: "🟡", 3: "🔵", 4: "⚫️", 5: "⚪️"}
+	cn := map[string]int{"🟢": 0, "🔴": 1, "🟡": 2, "🔵": 3, "🟠": 4, "🟣": 5}
+	nc := map[int]string{0: "🟢", 1: "🔴", 2: "🟡", 3: "🔵", 4: "🟠", 5: "🟣"}
 	colors := ""
 	for i := 0; i < len(nc); i++ {
 		colors += nc[i]
@@ -35,12 +35,8 @@ func main() {
 			case "play":
 				play = true
 				attempt = 0
-				line = ""
 				rand.Seed(time.Now().UnixNano())
 				p = rand.Perm(6)
-				for _, c := range p[:4] {
-					line += nc[c]
-				}
 				msg.Text = fmt.Sprintf("Введите комбинацию разных 4-x цветов (%s):", colors)
 				if _, err = bot.Send(msg); err != nil {
 					panic(err)
@@ -55,7 +51,7 @@ func main() {
 				if play {
 					attempt++
 					q := make([]int, 4)
-					ans := strings.Split(msg.Text, " ")
+					ans := strings.Split(msg.Text, "")
 					for i := 0; i < 4; i++ {
 						q[i] = cn[ans[i]]
 					}
@@ -80,6 +76,10 @@ func main() {
 
 					msg.Text = fmt.Sprintf("%v", s)
 					if win == 4 {
+						line = ""
+						for _, c := range p[:4] {
+							line += nc[c]
+						}
 						msg.Text = fmt.Sprintf("Вы угадали c %d попытки! Комбинация: %s", attempt, line)
 					}
 					if _, err = bot.Send(msg); err != nil {

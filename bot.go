@@ -39,7 +39,7 @@ func main() {
 				attempt = 0
 				rand.Seed(time.Now().UnixNano())
 				p = rand.Perm(6)
-				msg.Text = fmt.Sprintf("Введите комбинацию разных 4-x цветов (%s):", colors)
+				msg.Text = fmt.Sprintf("Введите комбинацию из 4-x разных цветов (%s):", colors)
 				if _, err = bot.Send(msg); err != nil {
 					panic(err)
 				}
@@ -56,6 +56,13 @@ func main() {
 					ans := strings.Split(msg.Text, "")
 					for i := 0; i < 4; i++ {
 						q[i] = cn[ans[i]]
+						_, ok := cn[ans[i]]
+						if !ok || len(ans) != 4 {
+							msg.Text = fmt.Sprintf("Введите комбинацию из 4-x разных цветов (%s):", colors)
+							if _, err = bot.Send(msg); err != nil {
+								panic(err)
+							}
+						}
 					}
 
 					s := make([]string, 0)
@@ -82,7 +89,7 @@ func main() {
 						for _, c := range p[:4] {
 							line += nc[c]
 						}
-						msg.Text = fmt.Sprintf("Вы угадали c %d попытки! Комбинация: %s", attempt, line)
+						msg.Text = fmt.Sprintf("Вы угадали c %d попытки!\nКомбинация: %s", attempt, line)
 					}
 					if _, err = bot.Send(msg); err != nil {
 						panic(err)

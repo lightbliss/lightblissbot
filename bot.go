@@ -7,13 +7,15 @@ import (
 	"net/http"
 	"os"
 	"strings"
+	"sync"
 	"time"
 
 	tgBotAPI "github.com/go-telegram-bot-api/telegram-bot-api/v5"
 )
 
 func main() {
-	bot, u := mustBot()
+	wg := &sync.WaitGroup{}
+	bot, u := mustBot(wg)
 	updates := bot.GetUpdatesChan(u)
 
 	var err error
@@ -32,7 +34,7 @@ func main() {
 			msg := tgBotAPI.NewMessage(update.Message.Chat.ID, update.Message.Text)
 
 			switch update.Message.Text {
-			case "play":
+			case "☑️":
 				play = true
 				attempt = 0
 				rand.Seed(time.Now().UnixNano())
@@ -41,7 +43,7 @@ func main() {
 				if _, err = bot.Send(msg); err != nil {
 					panic(err)
 				}
-			case "stop":
+			case "🔲":
 				play = false
 				msg.Text = "Стоп игра"
 				if _, err = bot.Send(msg); err != nil {
@@ -99,11 +101,15 @@ func main() {
 			}
 		}
 	}
+
+	wg.Wait()
 }
 
-func mustBot() (*tgBotAPI.BotAPI, tgBotAPI.UpdateConfig) {
+func mustBot(wg *sync.WaitGroup) (*tgBotAPI.BotAPI, tgBotAPI.UpdateConfig) {
 	port := os.Getenv("PORT")
+	wg.Add(1)
 	go func() {
+		defer wg.Done()
 		log.Fatal(http.ListenAndServe(":"+port, nil))
 	}()
 
